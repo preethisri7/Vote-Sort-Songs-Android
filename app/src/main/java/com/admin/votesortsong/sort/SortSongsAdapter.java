@@ -9,34 +9,43 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.admin.votesortsong.R;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHolder> {
+
+
 
     protected static class SongViewHolder extends RecyclerView.ViewHolder {
 
         View layout;
-        TextView vote;
-        TextView title;
+        TextView vote,title,artist;
         ImageView img;
+
 
         public SongViewHolder(View itemView) {
             super(itemView);
             layout = itemView;
             vote = (TextView) itemView.findViewById(R.id.songVote);
             title = (TextView) itemView.findViewById(R.id.songTitle);
+            artist = (TextView) itemView.findViewById(R.id.songArtist);
             img = (ImageView) itemView.findViewById(R.id.imageView);
+
         }
 
     }
 
     private LayoutInflater mLayoutInflater;
 
-    private SortedList<Song> mSongs;
+   Map<String, String> map = new HashMap<String, String>();
 
-    public SortSongsAdapter(Context context, List<Song> songs) {
+    private SortedList <MusicBean> mSongs;
+
+    public SortSongsAdapter(Context context, List<MusicBean> songs) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mSongs = new SortedList<>(Song.class, new SongListCallback());
+        mSongs = new SortedList<>(MusicBean.class, new SongListCallback());
         mSongs.addAll(songs);
     }
 
@@ -53,29 +62,39 @@ class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHol
 
     @Override
     public void onBindViewHolder(final SongViewHolder viewHolder, final int position) {
-        final Song song = mSongs.get(position);
-        viewHolder.vote.setText(song.getVote());
-        viewHolder.title.setText(song.getTitle());
+        final MusicBean song = mSongs.get(position);
+        viewHolder.vote.setText(song.getVotes());
+        viewHolder.title.setText(song.getMusicTitle());
         viewHolder.img.setImageResource(song.getImage());
+        viewHolder.artist.setText(song.getArtist());
+
+
+
+
 
       final String title = viewHolder.title.getText().toString();
       final int img = R.drawable.like;
+      final long musicID = song.getMusicID();
+      final String artist = song.getArtist();
+      final boolean playlist = song.isInPlayist();
+
 
 
       viewHolder.img.setOnClickListener(new View.OnClickListener() {
 
-        int count = Integer.valueOf(song.getVote());
+        int count = Integer.valueOf(song.getVotes());
         public void onClick(View view) {
-
+        if (count == 0) {
           count = count + 1;
-          viewHolder.vote.setText(""+count);
+          viewHolder.vote.setText("" + count);
           String voteCount = viewHolder.vote.getText().toString();
-          Song song = new Song(
-            voteCount,
-            title,
-            img);
-          mSongs.updateItemAt(position,song);
+          MusicBean song = new MusicBean(musicID,title,artist,playlist,voteCount,img);
+          mSongs.updateItemAt(position, song);
           notifyDataSetChanged();
+          map.put(Long.toString(musicID),voteCount);
+          System.out.println(map);
+
+        }
         }
 
       });
@@ -84,12 +103,12 @@ class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHol
     /**
      updates on song list changes.
      */
-    private class SongListCallback extends SortedList.Callback<Song> {
+    private class SongListCallback extends SortedList.Callback<MusicBean> {
 
         @Override
-        public int compare(Song s1, Song s2) {
-          int val1=Integer.valueOf(s1.getVote());
-          int val2=Integer.valueOf(s2.getVote());
+        public int compare(MusicBean s1, MusicBean s2) {
+          int val1=Integer.valueOf(s1.getVotes());
+          int val2=Integer.valueOf(s2.getVotes());
           return val2 > val1 ? 1 : (val2 < val1 ? -1 : 0);
 
 
@@ -115,12 +134,12 @@ class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHol
         }
 
         @Override
-        public boolean areContentsTheSame(Song oldItem, Song newItem) {
+        public boolean areContentsTheSame(MusicBean oldItem, MusicBean newItem) {
             return false;
         }
 
         @Override
-        public boolean areItemsTheSame(Song item1, Song item2) {
+        public boolean areItemsTheSame(MusicBean item1, MusicBean item2) {
             return false;
         }
 

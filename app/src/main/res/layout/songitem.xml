@@ -17,6 +17,18 @@
         android:gravity="center"
         android:padding="8dp" />
 
+  <TextView
+    android:id="@+id/songArtist"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:background="@color/cyan"
+    android:gravity="center"
+    android:padding="8dp" />
+
+
+
     <TextView
       android:id="@+id/songVote"
       android:layout_width="wrap_content"
