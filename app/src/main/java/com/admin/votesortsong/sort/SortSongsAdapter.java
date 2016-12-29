@@ -3,10 +3,12 @@ package com.admin.votesortsong.sort;
 import android.content.Context;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.admin.votesortsong.R;
 
@@ -16,6 +18,8 @@ import java.util.Map;
 
 class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHolder> {
 
+  private String LOG_TAG="Shh_SortSongsAdapter";
+
 
 
     protected static class SongViewHolder extends RecyclerView.ViewHolder {
@@ -23,7 +27,6 @@ class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHol
         View layout;
         TextView vote,title,artist;
         ImageView img;
-
 
         public SongViewHolder(View itemView) {
             super(itemView);
@@ -63,9 +66,9 @@ class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHol
     @Override
     public void onBindViewHolder(final SongViewHolder viewHolder, final int position) {
         final MusicBean song = mSongs.get(position);
-        viewHolder.vote.setText(song.getVotes());
+        viewHolder.vote.setText(Integer.toString(song.getVotes()));
         viewHolder.title.setText(song.getMusicTitle());
-        viewHolder.img.setImageResource(song.getImage());
+        viewHolder.img.setImageResource(R.drawable.like);
         viewHolder.artist.setText(song.getArtist());
 
 
@@ -82,17 +85,18 @@ class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SongViewHol
 
       viewHolder.img.setOnClickListener(new View.OnClickListener() {
 
-        int count = Integer.valueOf(song.getVotes());
+        int count = song.getVotes();
         public void onClick(View view) {
         if (count == 0) {
           count = count + 1;
           viewHolder.vote.setText("" + count);
-          String voteCount = viewHolder.vote.getText().toString();
-          MusicBean song = new MusicBean(musicID,title,artist,playlist,voteCount,img);
+         // String voteCount = viewHolder.vote.getText().toString();
+          MusicBean song = new MusicBean(musicID,title,artist,playlist,count);
           mSongs.updateItemAt(position, song);
           notifyDataSetChanged();
-          map.put(Long.toString(musicID),voteCount);
-          System.out.println(map);
+          map.put(Long.toString(musicID),Integer.toString(count));
+          //System.out.println(map);
+          Log.d(LOG_TAG,"The map is"+map.toString());
 
         }
         }

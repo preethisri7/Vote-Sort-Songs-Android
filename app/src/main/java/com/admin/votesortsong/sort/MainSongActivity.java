@@ -48,7 +48,7 @@ public class MainSongActivity extends Activity {
     private List<MusicBean> getAll() {
         List<MusicBean> songs = new ArrayList<>();
         for(int i=0;i<10;i++) {
-          songs.add(new MusicBean(1234+i,"Song" + i,"A" + i,true,"0", R.drawable.like));
+          songs.add(new MusicBean(1234+i,"Song" + i,"A" + i,true,0));
         }
         return songs;
     }

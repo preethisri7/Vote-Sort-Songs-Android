@@ -13,16 +13,16 @@ public class MusicBean implements Serializable {
   private String musicTitle;
   private String artist;
   private boolean inPlayist;
-  private String votes;
-  private int image;
+  private int votes;
+ // private int image;
 
-  public MusicBean(long musicID,String musicTitle,String artist,boolean inPlayist,String votes,int image) {
+  public MusicBean(long musicID,String musicTitle,String artist,boolean inPlayist,int votes) {
     this.musicID = musicID;
     this.musicTitle=musicTitle;
     this.artist=artist;
     this.inPlayist=inPlayist;
     this.votes=votes;
-    this.image = image;
+   // this.image = image;
   }
 
   public long getMusicID() {
@@ -58,18 +58,18 @@ public class MusicBean implements Serializable {
     this.inPlayist = inPlayist;
   }
 
-  public String getVotes() {
+  public int getVotes() {
     return votes;
   }
 
-  public void setVotes(String votes) {
+  public void setVotes(int votes) {
     this.votes = votes;
   }
-  public int getImage() {
+ /* public int getImage() {
     return image;
   }
 
   public void setImage(int image) {
     this.image =image;
-  }
+  } */
 }
